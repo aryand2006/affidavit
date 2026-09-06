@@ -1,0 +1,21 @@
+{
+  "name": "3-pair cointegration",
+  "capital": 1000000,
+  "years": 2,
+  "risk_free_rate": 0.065,
+  "benchmark_annual_return": 0.12,
+  "candidates": {
+    "pair_a": 163000,
+    "pair_b": 89000,
+    "pair_c": -38000,
+    "pair_d": -72000,
+    "pair_e": -54000,
+    "pair_f": -54000
+  },
+  "selected": ["pair_a", "pair_b", "pair_c"],
+  "degrees_of_freedom": [
+    {"name": "pair_universe", "levels": 6, "note": "six cointegration pairs screened"},
+    {"name": "entry_z", "levels": 4, "note": "z-score entry grid"},
+    {"name": "exit_z", "levels": 3, "note": "z-score exit grid"}
+  ]
+}
