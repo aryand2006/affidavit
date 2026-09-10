@@ -76,7 +76,9 @@ denominated in money rather than in probability, and it usually lands harder.
 git clone https://github.com/aryand2006/affidavit && cd affidavit
 pip install -e .        # numpy is the only dependency
 
+# `sworn` is an alias for the same CLI
 affidavit explain
+sworn demo
 affidavit check --ledger examples/cointegration-pairs.json --json-out affidavit.json
 ```
 
