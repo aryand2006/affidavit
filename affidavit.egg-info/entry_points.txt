@@ -1,0 +1,3 @@
+[console_scripts]
+affidavit = affidavit.cli:main
+sworn = affidavit.cli:main

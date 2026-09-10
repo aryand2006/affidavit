@@ -34,6 +34,7 @@ dev = ["pytest>=7"]
 
 [project.scripts]
 affidavit = "affidavit.cli:main"
+sworn = "affidavit.cli:main"
 
 [project.urls]
 Source = "https://github.com/aryand2006/affidavit"

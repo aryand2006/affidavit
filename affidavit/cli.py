@@ -137,6 +137,76 @@ def cmd_explain(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_demo(_: argparse.Namespace) -> int:
+    """Generate a known-overfit ledger and show UNSWORN, then a clean case."""
+    import tempfile
+
+    bad = {
+        "name": "demo-overfit",
+        "years": 2.0,
+        "risk_free_rate": 0.065,
+        "benchmark_annual_return": 0.12,
+        "capital": 1.0,
+        "candidates": {
+            "pair_a": 0.12,
+            "pair_b": 0.08,
+            "pair_c": 0.05,
+            "pair_d": -0.04,
+            "pair_e": -0.08,
+            "pair_f": -0.11,
+        },
+        "selected": ["pair_a", "pair_b", "pair_c"],
+        "n_trials": 72,
+    }
+    good = {
+        "name": "demo-robust",
+        "years": 5.0,
+        "risk_free_rate": 0.02,
+        "candidates": {
+            "alpha": 0.11,
+            "beta": 0.105,
+            "gamma": 0.10,
+        },
+        "selected": ["alpha", "beta", "gamma"],
+        "n_trials": 3,
+    }
+
+    with tempfile.TemporaryDirectory() as tmp:
+        bad_path = Path(tmp) / "overfit.json"
+        good_path = Path(tmp) / "robust.json"
+        bad_path.write_text(json.dumps(bad, indent=2))
+        good_path.write_text(json.dumps(good, indent=2))
+
+        print("=== known-overfit search (expect UNSWORN) ===\n")
+        cmd_check(
+            argparse.Namespace(
+                ledger=str(bad_path),
+                returns=None,
+                turnover=None,
+                n_trials=None,
+                periods_per_year=252,
+                placebo_n=100,
+                seed=0,
+                subject="demo-overfit",
+                json_out=None,
+            )
+        )
+        print("\n=== dense portfolio, few trials (expect closer to SWORN) ===\n")
+        return cmd_check(
+            argparse.Namespace(
+                ledger=str(good_path),
+                returns=None,
+                turnover=None,
+                n_trials=None,
+                periods_per_year=252,
+                placebo_n=100,
+                seed=0,
+                subject="demo-robust",
+                json_out=None,
+            )
+        )
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="affidavit",
@@ -158,6 +228,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     explain = sub.add_parser("explain", help="what each check asks and why")
     explain.set_defaults(func=cmd_explain)
+
+    demo = sub.add_parser("demo", help="run synthetic overfit vs robust examples")
+    demo.set_defaults(func=cmd_demo)
     return p
 
 
